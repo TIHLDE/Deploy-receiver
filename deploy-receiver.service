@@ -1,0 +1,45 @@
+[Unit]
+Description=Deploy Receiver — triggers repo deploy.sh on GitHub Actions notify
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+
+# --- Working directory & binary ---
+WorkingDirectory=/opt/deploy-receiver
+ExecStart=/usr/bin/node /opt/deploy-receiver/server.js
+
+# --- Systemd credentials (secrets never touch disk in /opt) ---
+# Create these files as root, chmod 600:
+#   /etc/deploy-receiver/credentials/vaultwarden-master-password
+#   /etc/deploy-receiver/credentials/ghcr-pat
+#   /etc/deploy-receiver/credentials/deploy-receiver-token
+LoadCredential=vaultwarden-master-password:/etc/deploy-receiver/credentials/vaultwarden-master-password
+LoadCredential=ghcr-pat:/etc/deploy-receiver/credentials/ghcr-pat
+LoadCredential=deploy-receiver-token:/etc/deploy-receiver/credentials/deploy-receiver-token
+
+# --- Environment (non-secret config) ---
+Environment=DEPLOY_RECEIVER_PORT=4040
+Environment=DEPLOY_APPS_ROOT=/home/apps
+Environment=DEPLOY_ALLOWLIST_PATH=/etc/deploy-receiver/allowlist.json
+Environment=DEPLOY_TIMEOUT_MS=180000
+
+# --- Security hardening ---
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=deploy-receiver
+
+# Restrict what the process can do (defense-in-depth)
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/apps
+PrivateTmp=yes
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,16 @@
+{
+  "name": "deploy-receiver",
+  "version": "1.0.0",
+  "description": "Minimal deploy receiver service — listens for POST requests from GitHub Actions and triggers repo-specific deploy.sh scripts.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "private": true
+}
