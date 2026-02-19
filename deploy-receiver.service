@@ -27,6 +27,7 @@ Environment=DEPLOY_RECEIVER_PORT=4040
 Environment=DEPLOY_APPS_ROOT=/home/debian/apps
 Environment=DEPLOY_ALLOWLIST_PATH=/etc/deploy-receiver/allowlist.json
 Environment=DEPLOY_TIMEOUT_MS=180000
+Environment=BITWARDENCLI_APPDATA_DIR=/home/debian/apps/.bw-cli
 
 # --- Security hardening ---
 Restart=on-failure

@@ -194,7 +194,7 @@ app.post("/deploy", async (req, res) => {
         repo,
         image,
         tag,
-        error: tail(result.stderr || result.stdout, config.maxOutputChars),
+        error: tail((result.stderr || "") + (result.stdout || ""), config.maxOutputChars),
       });
     }
   } catch (err) {
@@ -227,6 +227,11 @@ function runDeploy({ deployScript, repoDir, repo, image, tag, env, reqId }) {
         DEPLOY_IMAGE: image,
         DEPLOY_TAG: tag,
         DEPLOY_ENV: env,
+
+        // Bitwarden CLI state directory
+        BITWARDENCLI_APPDATA_DIR:
+          process.env.BITWARDENCLI_APPDATA_DIR ||
+          path.join(config.appsRoot, ".bw-cli"),
 
         // Secrets (named to match existing deploy.sh conventions)
         VAULTWARDEN_MASTER_PASSWORD: config.secrets.vaultwardenMasterPassword,
