@@ -7,7 +7,7 @@ const path = require("path");
 // Defaults
 // ---------------------------------------------------------------------------
 const DEFAULTS = {
-  IP_ADDRESS: "192.168.0.41",
+  IP_ADDRESS: "127.0.0.1",
   PORT: 4040,
   APPS_ROOT: "/home/debian/apps",
   ALLOWLIST_PATH: "/etc/deploy-receiver/allowlist.json",
