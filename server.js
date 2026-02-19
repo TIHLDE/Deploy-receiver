@@ -22,6 +22,9 @@ const TAG_RE = /^[a-zA-Z0-9._-]{1,128}$/;
 /** Allowed environment values. */
 const ENVS = new Set(["prod", "dev", ""]);
 
+/** IP address to listen to */
+const IP_ADDRESS = "192.168.0.41";
+
 // ---------------------------------------------------------------------------
 // Per-repo deploy lock (in-memory)
 // ---------------------------------------------------------------------------
@@ -287,6 +290,6 @@ function timingSafeEqual(a, b) {
 // ---------------------------------------------------------------------------
 // Start
 // ---------------------------------------------------------------------------
-app.listen(config.port, "127.0.0.1", () => {
-  console.log(`[deploy-receiver] Listening on 127.0.0.1:${config.port}`);
+app.listen(config.port, IP_ADDRESS, () => {
+  console.log(`[deploy-receiver] Listening on ${IP_ADDRESS}:${config.port}`);
 });
