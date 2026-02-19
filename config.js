@@ -8,7 +8,7 @@ const path = require("path");
 // ---------------------------------------------------------------------------
 const DEFAULTS = {
   PORT: 4040,
-  APPS_ROOT: "/home/apps",
+  APPS_ROOT: "/home/debian/apps",
   ALLOWLIST_PATH: "/etc/deploy-receiver/allowlist.json",
   DEPLOY_TIMEOUT_MS: 180_000, // 3 minutes
   MAX_OUTPUT_CHARS: 4000,
@@ -23,7 +23,7 @@ function readCredential(name) {
   const credDir = process.env.CREDENTIALS_DIRECTORY;
   if (!credDir) {
     throw new Error(
-      `CREDENTIALS_DIRECTORY is not set — are you running under the systemd unit with LoadCredential?`
+      `CREDENTIALS_DIRECTORY is not set — are you running under the systemd unit with LoadCredential?`,
     );
   }
   const filePath = path.join(credDir, name);
@@ -49,7 +49,7 @@ function loadConfig() {
 
   // --- Secrets via systemd credentials ---
   const vaultwardenMasterPassword = readCredential(
-    "vaultwarden-master-password"
+    "vaultwarden-master-password",
   );
   const ghcrPat = readCredential("ghcr-pat");
   const deployReceiverToken = readCredential("deploy-receiver-token");
@@ -64,7 +64,7 @@ function loadConfig() {
         throw new Error("Allowlist must be a JSON array of repo slugs");
       }
       console.log(
-        `[config] Loaded allowlist with ${allowlist.length} repo(s) from ${allowlistPath}`
+        `[config] Loaded allowlist with ${allowlist.length} repo(s) from ${allowlistPath}`,
       );
     } catch (err) {
       console.error(`[config] Failed to parse allowlist: ${err.message}`);
@@ -72,7 +72,7 @@ function loadConfig() {
     }
   } else {
     console.warn(
-      `[config] No allowlist found at ${allowlistPath} — ALL repo slugs will be accepted`
+      `[config] No allowlist found at ${allowlistPath} — ALL repo slugs will be accepted`,
     );
   }
 

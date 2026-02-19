@@ -12,10 +12,10 @@ set -euo pipefail
 #   4. Restart the container with the new image
 #
 # Place a customized version of this script in:
-#   /home/apps/<your-repo>/deploy.sh
+#   /home/debian/apps/<your-repo>/deploy.sh
 #
 # Make it executable:
-#   chmod +x /home/apps/<your-repo>/deploy.sh
+#   chmod +x /home/debian/apps/<your-repo>/deploy.sh
 ################################################################################
 
 ################################################################################

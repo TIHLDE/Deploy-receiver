@@ -23,7 +23,7 @@ LoadCredential=deploy-receiver-token:/etc/deploy-receiver/credentials/deploy-rec
 
 # --- Environment (non-secret config) ---
 Environment=DEPLOY_RECEIVER_PORT=4040
-Environment=DEPLOY_APPS_ROOT=/home/apps
+Environment=DEPLOY_APPS_ROOT=/home/debian/apps
 Environment=DEPLOY_ALLOWLIST_PATH=/etc/deploy-receiver/allowlist.json
 Environment=DEPLOY_TIMEOUT_MS=180000
 
@@ -38,7 +38,7 @@ SyslogIdentifier=deploy-receiver
 NoNewPrivileges=yes
 ProtectSystem=strict
 ProtectHome=read-only
-ReadWritePaths=/home/apps
+ReadWritePaths=/home/debian/apps
 PrivateTmp=yes
 
 [Install]

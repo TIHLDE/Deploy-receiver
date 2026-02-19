@@ -28,7 +28,7 @@ GitHub Actions                          Server
 
 1. CI builds and pushes a Docker image to GHCR.
 2. CI calls the reusable `_notify_deploy.yml` workflow (from [TIHLDE/tihlde-workflows](https://github.com/TIHLDE/tihlde-workflows)), which POSTs to the receiver.
-3. The receiver validates the token, checks the allowlist, and runs `/home/apps/<repo>/deploy.sh`.
+3. The receiver validates the token, checks the allowlist, and runs `/home/debian/apps/<repo>/deploy.sh`.
 4. `deploy.sh` pulls the new image and restarts the container.
 
 ---
@@ -49,7 +49,7 @@ GitHub Actions                          Server
     ghcr-pat                       # chmod 600, root:root
     deploy-receiver-token          # chmod 600, root:root
 
-/home/apps/<repo-slug>/            # One folder per deployed project
+/home/debian/apps/<repo-slug>/            # One folder per deployed project
   deploy.sh                        # chmod +x, project-specific deploy script
 ```
 
@@ -146,21 +146,21 @@ sudo journalctl -u deploy-receiver -f
 For each repo you want to deploy, create a directory with a `deploy.sh`:
 
 ```bash
-mkdir -p /home/apps/my-repo
+mkdir -p /home/debian/apps/my-repo
 
 # Copy and customize the example script
-cp /opt/deploy-receiver/example-deploy.sh /home/apps/my-repo/deploy.sh
+cp /opt/deploy-receiver/example-deploy.sh /home/debian/apps/my-repo/deploy.sh
 
 # Edit it to set your project-specific values
-nano /home/apps/my-repo/deploy.sh
+nano /home/debian/apps/my-repo/deploy.sh
 
 # Make it executable
-chmod +x /home/apps/my-repo/deploy.sh
+chmod +x /home/debian/apps/my-repo/deploy.sh
 ```
 
 > **See [example-deploy.sh](example-deploy.sh)** for a fully-commented reference implementation showing how to use Vaultwarden secrets and restart containers.
 
-The receiver runs `deploy.sh` in the repo folder (`/home/apps/<repo-slug>/`) and passes deploy metadata via environment variables (see [Environment variables passed to deploy.sh](#environment-variables-passed-to-deploysh)).
+The receiver runs `deploy.sh` in the repo folder (`/home/debian/apps/<repo-slug>/`) and passes deploy metadata via environment variables (see [Environment variables passed to deploy.sh](#environment-variables-passed-to-deploysh)).
 
 ---
 
@@ -171,7 +171,7 @@ All non-secret configuration is via environment variables set in the systemd uni
 | Variable                | Default                             | Description                        |
 |-------------------------|-------------------------------------|------------------------------------|
 | `DEPLOY_RECEIVER_PORT`  | `4040`                              | Port to listen on (localhost only) |
-| `DEPLOY_APPS_ROOT`      | `/home/apps`                        | Root directory for app folders     |
+| `DEPLOY_APPS_ROOT`      | `/home/debian/apps`                        | Root directory for app folders     |
 | `DEPLOY_ALLOWLIST_PATH` | `/etc/deploy-receiver/allowlist.json` | Path to JSON allowlist           |
 | `DEPLOY_TIMEOUT_MS`     | `180000`                            | Script execution timeout (ms)      |
 | `DEPLOY_MAX_OUTPUT_CHARS` | `4000`                            | Max chars returned in response     |
@@ -330,9 +330,9 @@ Before exposing this service, verify every item:
 | `403 Repo not in allowlist` | Repo slug not in `allowlist.json` | Add the repo slug to the allowlist and restart (or the receiver reads it on each request) |
 | `400 Invalid repo slug format` | Repo name contains invalid characters | Use only `a-z`, `0-9`, `.`, `_`, `-` |
 | `400 Invalid image format` | Image doesn't start with `ghcr.io/` | Ensure image follows `ghcr.io/<owner>/<repo>` pattern |
-| `404 Repo directory not found` | No `/home/apps/<repo>/` on server | Create the directory: `mkdir -p /home/apps/<repo>` |
-| `404 deploy.sh not found` | Script missing in repo directory | Create `deploy.sh` in `/home/apps/<repo>/` |
-| `500 deploy.sh is not executable` | Missing execute permission | `chmod +x /home/apps/<repo>/deploy.sh` |
+| `404 Repo directory not found` | No `/home/debian/apps/<repo>/` on server | Create the directory: `mkdir -p /home/debian/apps/<repo>` |
+| `404 deploy.sh not found` | Script missing in repo directory | Create `deploy.sh` in `/home/debian/apps/<repo>/` |
+| `500 deploy.sh is not executable` | Missing execute permission | `chmod +x /home/debian/apps/<repo>/deploy.sh` |
 | `409 Deploy already in progress` | Concurrent deploy for same repo | Wait for current deploy to finish |
 | `500` with timeout error | deploy.sh takes too long | Increase `DEPLOY_TIMEOUT_MS` or optimize the script |
 | Service won't start | Credential files missing or wrong permissions | Check all 3 files exist in `/etc/deploy-receiver/credentials/` with `chmod 600` |
@@ -366,7 +366,7 @@ When the receiver executes `deploy.sh`, it sets these environment variables:
 | `VAULTWARDEN_MASTER_PASSWORD` | From systemd credential                  |
 | `GHCR_PAT`                    | From systemd credential                  |
 
-The script's working directory is set to `/home/apps/<repo>/`.
+The script's working directory is set to `/home/debian/apps/<repo>/`.
 
 ---
 
