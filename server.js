@@ -229,9 +229,9 @@ function runDeploy({ deployScript, repoDir, repo, image, tag, env, reqId }) {
         DEPLOY_ENV: env,
 
         // Secrets (named to match existing deploy.sh conventions)
-        VAULTWARDEN_MASTER_PASSWORD:
-          config.secrets.vaultwardenMasterPassword,
-        GHCR_TOKEN: config.secrets.ghcrPat,
+        VAULTWARDEN_MASTER_PASSWORD: config.secrets.vaultwardenMasterPassword,
+        GHCR_PAT: config.secrets.ghcrPat,
+        GHCR_TOKEN: config.secrets.ghcrPat, // optional: keep for backwards compatibility
       },
       stdio: ["ignore", "pipe", "pipe"],
       timeout: config.deployTimeoutMs,
