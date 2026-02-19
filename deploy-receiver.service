@@ -22,6 +22,7 @@ LoadCredential=ghcr-pat:/etc/deploy-receiver/credentials/ghcr-pat
 LoadCredential=deploy-receiver-token:/etc/deploy-receiver/credentials/deploy-receiver-token
 
 # --- Environment (non-secret config) ---
+Environment=IP_ADDRESS=192.168.0.41
 Environment=DEPLOY_RECEIVER_PORT=4040
 Environment=DEPLOY_APPS_ROOT=/home/debian/apps
 Environment=DEPLOY_ALLOWLIST_PATH=/etc/deploy-receiver/allowlist.json
