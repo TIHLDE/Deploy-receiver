@@ -7,6 +7,7 @@ const path = require("path");
 // Defaults
 // ---------------------------------------------------------------------------
 const DEFAULTS = {
+  IP_ADDRESS: "192.168.0.41",
   PORT: 4040,
   APPS_ROOT: "/home/debian/apps",
   ALLOWLIST_PATH: "/etc/deploy-receiver/allowlist.json",
@@ -37,6 +38,7 @@ function readCredential(name) {
 // Load configuration
 // ---------------------------------------------------------------------------
 function loadConfig() {
+  const ipAddress = process.env.IP_ADDRESS || DEFAULTS.IP_ADDRESS;
   const port = parseInt(process.env.DEPLOY_RECEIVER_PORT, 10) || DEFAULTS.PORT;
   const appsRoot = process.env.DEPLOY_APPS_ROOT || DEFAULTS.APPS_ROOT;
   const allowlistPath =
@@ -77,6 +79,7 @@ function loadConfig() {
   }
 
   return {
+    ipAddress,
     port,
     appsRoot,
     allowlist,
